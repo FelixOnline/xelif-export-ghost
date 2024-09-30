@@ -19,7 +19,7 @@ import { readFileSync } from "fs";
 
 const context = new MigrateContext();
 
-const ghostSupportedHtml = {
+export const ghostSupportedHtml = {
   allowedTags: [
     "b",
     "i",

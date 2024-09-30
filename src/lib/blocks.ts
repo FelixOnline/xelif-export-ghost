@@ -1,5 +1,8 @@
 import SimpleDom from "simple-dom";
 import imageCard from "@tryghost/kg-default-cards/lib/cards/image.js";
+import calloutCard from "@tryghost/kg-default-cards/lib/cards/callout.js";
+import sanitizeHtml from "sanitize-html";
+import { ghostSupportedHtml } from "./process.js";
 
 const serializer = new SimpleDom.HTMLSerializer(SimpleDom.voidMap);
 
@@ -229,16 +232,26 @@ export class SidebarBlock extends Block {
 
   constructor(html: string, title: string | null) {
     super();
-    this.html = html;
+    this.html = sanitizeHtml(html, ghostSupportedHtml);
     this.title = title;
   }
 
   formatHtml(): string {
-    return `
-<section class="sidebar">
-    <h2>${this.title}</h2>
-    ${this.html}
-</section>
-        `;
+    let payload: any = {
+      calloutText: `
+        <h3>${this.title}</h3>
+        ${this.html}
+      `,
+    };
+
+    // This is arbitrary, but otherwise the card has the same colour as the background, rendering it useless.
+    payload.backgroundColor = "yellow";
+
+    return serializer.serialize(
+      calloutCard.render({
+        env: { dom: new SimpleDom.Document() },
+        payload: payload,
+      }),
+    );
   }
 }
