@@ -241,6 +241,9 @@ class XelifExporter {
 
     let bodyHtml = $html.html();
 
+    // Remove random non-printable characters like 
+    bodyHtml = bodyHtml.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+
     const sanitizedHtml = sanitizeHtml(bodyHtml, ghostSupportedHtml);
 
     post.set("html", sanitizedHtml.trim());
