@@ -232,7 +232,12 @@ class XelifExporter {
       }
     });
 
-    // TODO convert links between articles?
+    // Remove https://felixonline.co.uk from links to make them relative
+    $html("a[href^='https://felixonline.co.uk']").each((_i: any, el: any) => {
+      const href = $html(el).attr("href");
+      const relativeHref = href.replace("https://felixonline.co.uk", "");
+      $html(el).attr("href", relativeHref);
+    });
 
     let bodyHtml = $html.html();
 
