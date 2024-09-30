@@ -174,7 +174,7 @@ class XelifExporter {
     if (issue_number != null) {
       post.addTag({
         name: "Issue " + issue_number,
-        slug: issue_number,
+        slug: `${issue_number}`,
       });
     }
 
