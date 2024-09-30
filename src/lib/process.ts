@@ -154,7 +154,7 @@ class XelifExporter {
 
     post.set("visibility", "public");
     post.set("status", "published"); // Only published posts are selected in the query
-    post.set("type", "post"); // Assume everything is a post, since there are so few pages
+    post.set("type", data["section_slug"] == "about" ? "page" : "post");
 
     post.set("created_at", data["created_at"]);
     post.set("updated_at", data["updated_at"]);
