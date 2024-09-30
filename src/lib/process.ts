@@ -78,16 +78,16 @@ class XelifExporter {
     let dbConnection = await this.connectionPromise;
     const [rows] = await dbConnection.execute(`
         SELECT articles.id,
-               sections.title                                                             AS section_name,
-               sections.description                                                       AS section_description,
-               section_slugs.slug                                                         AS section_slug,
+               sections.title              AS section_name,
+               sections.description        AS section_description,
+               section_slugs.slug          AS section_slug,
                issues.issue,
                articles.updated_at,
                articles.created_at,
-               articles.publish_start_date                                                AS published_at,
-               headline                                                                   AS title,
-               lede                                                                       AS custom_excerpt,
-               article_slugs.slug                                                         AS slug
+               articles.publish_start_date AS published_at,
+               headline                    AS title,
+               lede                        AS custom_excerpt,
+               article_slugs.slug          AS slug
         FROM articles
                  LEFT JOIN article_slugs ON articles.id = article_slugs.article_id
                  LEFT JOIN issues ON articles.issue_id = issues.id
@@ -101,8 +101,6 @@ class XelifExporter {
           AND sections.published = 1
           AND section_slugs.deleted_at IS NULL
           AND section_slugs.active = 1
-        -- ORDER BY RAND() DESC
-        -- LIMIT 10
     `);
 
     await Promise.all((rows as any[]).map((data) => this.processArticle(data)));
