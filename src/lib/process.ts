@@ -134,7 +134,8 @@ class XelifExporter {
         {
           name: "Felix",
           slug: "felix",
-          bio: "Student Newspaper of Imperial College London",
+          bio: "The student newspaper of Imperial College London",
+          email: "felix@imperial.ac.uk",
         },
       ];
     }
@@ -143,6 +144,7 @@ class XelifExporter {
       name: data["name"],
       slug: data["slug"],
       bio: data["bio"],
+      email: `${data["slug"]}@felixonline.co.uk`,
     }));
   }
 
