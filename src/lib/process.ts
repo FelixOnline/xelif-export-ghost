@@ -168,19 +168,19 @@ class XelifExporter {
       );
     }
 
-    let issue_number: number = data["issue"];
-    if (issue_number != null) {
-      post.addTag({
-        name: "Issue " + issue_number,
-        slug: `${issue_number}`,
-      });
-    }
-
     post.addTag({
       name: data["section_name"],
       slug: data["section_slug"],
       description: data["section_description"],
     });
+
+    let issue_number: number = data["issue"];
+    if (issue_number != null) {
+      post.addTag({
+        name: "Issue " + issue_number,
+        slug: `issue-${issue_number}`,
+      });
+    }
 
     let articleId: number = data["id"];
     let authors: AuthorObject[] = await this.getArticleAuthors(articleId);
