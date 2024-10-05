@@ -76,7 +76,7 @@ export class ImageBlock extends Block {
     // TODO can make card float left/right and/or not full-width?
 
     let payload: any = {
-      src: `https://felixonline.co.uk/img/${this.image.uuid}`,
+      src: `https://img.felixonline.co.uk/${this.image.uuid}`,
     };
 
     if (this.image.alt_text != null) {
@@ -89,7 +89,7 @@ export class ImageBlock extends Block {
     } else if (this.image.caption != null) {
       payload["caption"] = this.image.caption;
     } else if (this.image.credit != null) {
-      payload["caption"] = `Credit: ${this.image.credit}`;
+      payload["caption"] = `Photo: ${this.image.credit}`;
     }
 
     return serializer.serialize(

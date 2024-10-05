@@ -1,4 +1,10 @@
+declare module "@tryghost/listr-smart-renderer";
+declare module "@tryghost/logging";
 declare module "@tryghost/mg-context";
+declare module "@tryghost/mg-assetscraper";
+declare module "@tryghost/mg-fs-utils";
+declare module "@tryghost/mg-html-lexical";
+declare module "@tryghost/mg-linkfixer";
 declare module "sanitize-html";
 declare module "@tryghost/kg-default-cards/lib/cards/image.js";
 declare module "@tryghost/kg-default-cards/lib/cards/callout.js";

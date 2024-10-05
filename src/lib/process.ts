@@ -74,33 +74,33 @@ class XelifExporter {
     this.connectionPromise = mysql.createConnection(config);
   }
 
-  async processAll(): Promise<string> {
+  async processAll(): Promise<any> {
     let dbConnection = await this.connectionPromise;
     const [rows] = await dbConnection.execute(`
-        SELECT articles.id,
-               sections.title              AS section_name,
-               sections.description        AS section_description,
-               section_slugs.slug          AS section_slug,
-               issues.issue,
-               articles.updated_at,
-               articles.created_at,
-               articles.publish_start_date AS published_at,
-               headline                    AS title,
-               lede                        AS custom_excerpt,
-               article_slugs.slug          AS slug
-        FROM articles
-                 LEFT JOIN article_slugs ON articles.id = article_slugs.article_id
-                 LEFT JOIN issues ON articles.issue_id = issues.id
-                 LEFT JOIN sections ON articles.section_id = sections.id
-                 LEFT JOIN section_slugs ON sections.id = section_slugs.section_id
-        WHERE articles.deleted_at IS NULL
-          AND articles.published = 1
-          AND article_slugs.deleted_at IS NULL
-          AND article_slugs.active = 1
-          AND sections.deleted_at IS NULL
-          AND sections.published = 1
-          AND section_slugs.deleted_at IS NULL
-          AND section_slugs.active = 1
+      SELECT articles.id,
+             sections.title              AS section_name,
+             sections.description        AS section_description,
+             section_slugs.slug          AS section_slug,
+             issues.issue,
+             articles.updated_at,
+             articles.created_at,
+             articles.publish_start_date AS published_at,
+             headline                    AS title,
+             lede                        AS custom_excerpt,
+             article_slugs.slug          AS slug
+      FROM articles
+             LEFT JOIN article_slugs ON articles.id = article_slugs.article_id
+             LEFT JOIN issues ON articles.issue_id = issues.id
+             LEFT JOIN sections ON articles.section_id = sections.id
+             LEFT JOIN section_slugs ON sections.id = section_slugs.section_id
+      WHERE articles.deleted_at IS NULL
+        AND articles.published = 1
+        AND article_slugs.deleted_at IS NULL
+        AND article_slugs.active = 1
+        AND sections.deleted_at IS NULL
+        AND sections.published = 1
+        AND section_slugs.deleted_at IS NULL
+        AND section_slugs.active = 1
     `);
 
     await Promise.all((rows as any[]).map((data) => this.processArticle(data)));
@@ -112,19 +112,19 @@ class XelifExporter {
     let dbConnection = await this.connectionPromise;
     const [rows] = (await dbConnection.execute(
       `
-          SELECT name,
-                 CONCAT_WS(' - ', role, bio) AS bio,
-                 slug
-          FROM articles
-                   LEFT JOIN article_writer ON articles.id = article_writer.article_id
-                   LEFT JOIN writers ON article_writer.writer_id = writers.id
-                   LEFT JOIN writer_slugs ON writers.id = writer_slugs.writer_id
-          WHERE articles.id = ?
-            AND writers.deleted_at IS NULL
-            AND writers.current = 1
-            AND writer_slugs.deleted_at IS NULL
-            AND writer_slugs.active = 1
-          ORDER BY article_writer.position
+        SELECT name,
+               CONCAT_WS(' - ', role, bio) AS bio,
+               slug
+        FROM articles
+               LEFT JOIN article_writer ON articles.id = article_writer.article_id
+               LEFT JOIN writers ON article_writer.writer_id = writers.id
+               LEFT JOIN writer_slugs ON writers.id = writer_slugs.writer_id
+        WHERE articles.id = ?
+          AND writers.deleted_at IS NULL
+          AND writers.current = 1
+          AND writer_slugs.deleted_at IS NULL
+          AND writer_slugs.active = 1
+        ORDER BY article_writer.position
       `,
       [articleId],
     )) as any[][];
@@ -174,6 +174,7 @@ class XelifExporter {
       name: data["section_name"],
       slug: data["section_slug"],
       description: data["section_description"],
+      // canonical_url: `https://felixonline.co.uk/section/${data["section_slug"]}`,
     });
 
     let issue_number: number = data["issue"];
@@ -181,7 +182,12 @@ class XelifExporter {
       post.addTag({
         name: "Issue " + issue_number,
         slug: `issue-${issue_number}`,
+        // canonical_url: `https://felixonline.co.uk/issue/${issue_number}`,
       });
+
+      // post.set("canonical_url", `https://felixonline.co.uk/issue/${issue_number}/${data["section_slug"]}/${data["slug"]}`);
+    } else {
+      // post.set("canonical_url", `https://felixonline.co.uk/section/${data["section_slug"]}/${data["slug"]}`);
     }
 
     let articleId: number = data["id"];
@@ -192,7 +198,7 @@ class XelifExporter {
     if (image != null) {
       post.set(
         "feature_image",
-        `https://felixonline.co.uk/img/${image["uuid"]}`,
+        `https://img.felixonline.co.uk/${image["uuid"]}`,
       );
       post.set("feature_image_alt", image["alt_text"]);
       post.set("feature_image_caption", image["caption"]);
@@ -255,10 +261,10 @@ class XelifExporter {
     let dbConnection = await this.connectionPromise;
     const [rows] = (await dbConnection.execute(
       `
-          SELECT uuid, width, height, filename, alt_text, credit, caption
-          FROM medias
-          WHERE id = ?
-            AND deleted_at IS NULL
+        SELECT uuid, width, height, filename, alt_text, credit, caption
+        FROM medias
+        WHERE id = ?
+          AND deleted_at IS NULL
       `,
       [mediaId],
     )) as any[][];
@@ -283,11 +289,11 @@ class XelifExporter {
     let dbConnection = await this.connectionPromise;
     const [rows] = (await dbConnection.execute(
       `
-          SELECT media_id
-          FROM mediables
-          WHERE deleted_at IS NULL
-            AND mediable_id = ?
-            AND mediable_type = 'articles'
+        SELECT media_id
+        FROM mediables
+        WHERE deleted_at IS NULL
+          AND mediable_id = ?
+          AND mediable_type = 'articles'
       `,
       [articleId],
     )) as any[][];
@@ -303,15 +309,15 @@ class XelifExporter {
     let dbConnection = await this.connectionPromise;
     const [rows] = (await dbConnection.execute(
       `
-          SELECT position,
-                 type,
-                 content,
-                 media_id
-          FROM blocks
-                   LEFT JOIN mediables ON blocks.type = 'image' AND blocks.id = mediables.mediable_id
-          WHERE blockable_id = ?
-            AND blockable_type = 'articles'
-          ORDER BY position;
+        SELECT position,
+               type,
+               content,
+               media_id
+        FROM blocks
+               LEFT JOIN mediables ON blocks.type = 'image' AND blocks.id = mediables.mediable_id
+        WHERE blockable_id = ?
+          AND blockable_type = 'articles'
+        ORDER BY position;
       `,
       [articleId],
     )) as any[][];

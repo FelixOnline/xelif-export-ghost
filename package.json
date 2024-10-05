@@ -1,11 +1,15 @@
 {
   "name": "xelif-export-ghost",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Timothy Langer",
   "type": "module",
   "devDependencies": {
     "@types/node": "^22.7.4",
     "typescript": "^5.6.2"
   },
   "scripts": {
+    "build": "rm -rf build && rm -rf tsconfig.tsbuildinfo && tsc --build --sourceMap",
     "build:watch": "tsc --watch --preserveWatchOutput --sourceMap"
   },
   "dependencies": {
@@ -13,11 +17,22 @@
     "@tryghost/html-to-mobiledoc": "^3.1.5",
     "@tryghost/kg-default-cards": "^10.0.9",
     "@tryghost/kg-html-to-lexical": "^1.1.19",
+    "@tryghost/listr-smart-renderer": "^0.5.15",
+    "@tryghost/logging": "^2.4.19",
+    "@tryghost/mg-assetscraper": "^0.4.17",
     "@tryghost/mg-context": "^0.1.8",
+    "@tryghost/mg-fs-utils": "^0.15.0",
+    "@tryghost/mg-html-lexical": "^0.0.14",
     "@tryghost/mg-json": "^0.11.3",
+    "@tryghost/mg-linkfixer": "^0.5.22",
+    "@tryghost/pretty-cli": "^1.2.45",
+    "@types/http-cache-semantics": "^4.0.4",
     "cheerio": "^1.0.0",
+    "keyv": "^5.0.3",
     "mysql2": "^3.11.3",
+    "pretty-ms": "^9.1.0",
     "sanitize-html": "^2.13.0",
     "simple-dom": "^1.4.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
