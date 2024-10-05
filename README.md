@@ -1,6 +1,12 @@
-# xelif-export-ghost
+# Xelif to Ghost exporter
 
-Create a file called `mysql-config.json` in the same directory as this `README` file. The content should look something like this, amended with credentials as appropriate.
+> Exports articles, pages and images from [Xelif](https://github.com/FelixOnline/xelif), our custom-built Twill-based
+> CMS for importing into [Ghost](https://ghost.org).
+
+# Setup
+
+Create a file called `mysql-config.json` in the same directory as this `README` file. The content should look something
+like this, amended with credentials as appropriate.
 
 ```json
 {
@@ -15,20 +21,17 @@ Create a file called `mysql-config.json` in the same directory as this `README` 
 Install the required dependencies with
 
 ```shell
-npm install
+yarn
 ```
 
-Run the automatic compiler using the _run_ button in IntelliJ or with the following command from the terminal
-```shell
-npm run build:watch
-```
+Run the program with
 
-Run the program by calling the compiled executable JavaScript like so
 ```shell
-node .\build\index.js
+yarn build && node build/index.js
 ```
 
 Use `prettier` to format TypeScript files
+
 ```shell
-npx prettier --write .\src\lib\*.ts .\src\*.ts
+npx prettier --write src/lib/*.ts src/*.ts
 ```
