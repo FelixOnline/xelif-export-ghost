@@ -150,6 +150,7 @@ class XelifExporter {
 
   private async processArticle(data: any) {
     const post = context.addPost();
+    const blocks: Block[] = [];
 
     post.set("title", data["title"]);
     post.set("slug", data["slug"]);
@@ -164,10 +165,11 @@ class XelifExporter {
 
     const lede = data["custom_excerpt"];
     if (lede != null) {
-      post.set(
-        "custom_excerpt",
-        lede.length > 300 ? lede.substring(0, 299) + "…" : lede,
-      );
+      if (lede.length <= 300) {
+        post.set("custom_excerpt", lede);
+      } else {
+        blocks.push(new TextBlock(`<p><b>${lede}</b></p>`));
+      }
     }
 
     post.addTag({
@@ -204,7 +206,9 @@ class XelifExporter {
       post.set("feature_image_caption", image["caption"]);
     }
 
-    const blocks: Block[] = await this.getArticleBlocks(articleId);
+    for (const block of await this.getArticleBlocks(articleId)) {
+      blocks.push(block);
+    }
     const rawHtml = blocks.map((block) => block.formatHtml()).join("\n");
 
     const $html: any = cheerio.load(rawHtml);
