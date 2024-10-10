@@ -161,7 +161,7 @@ const getFullTaskList = (options: any, logger: any) => {
     },
     {
       title: "Clearing cached files",
-      enabled: () => !options.cache && options.zip,
+      skip: () => !options.zip || (options.zip && !options.cache),
       task: async (ctx: any) => {
         try {
           await ctx.fileCache.emptyCurrentCacheDir();
@@ -198,7 +198,8 @@ const startMigrationTime = Date.now();
 let argv: any = {
   url: "https://felixonline.co.uk",
   zip: true,
-  verbose: true,
+  verbose: false,
+  convertHtmlToLexical: true,
 };
 
 let context = {

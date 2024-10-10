@@ -176,7 +176,6 @@ class XelifExporter {
       name: data["section_name"],
       slug: data["section_slug"],
       description: data["section_description"],
-      // canonical_url: `https://felixonline.co.uk/section/${data["section_slug"]}`,
     });
 
     let issue_number: number = data["issue"];
@@ -184,12 +183,7 @@ class XelifExporter {
       post.addTag({
         name: "Issue " + issue_number,
         slug: `issue-${issue_number}`,
-        // canonical_url: `https://felixonline.co.uk/issue/${issue_number}`,
       });
-
-      // post.set("canonical_url", `https://felixonline.co.uk/issue/${issue_number}/${data["section_slug"]}/${data["slug"]}`);
-    } else {
-      // post.set("canonical_url", `https://felixonline.co.uk/section/${data["section_slug"]}/${data["slug"]}`);
     }
 
     let articleId: number = data["id"];
